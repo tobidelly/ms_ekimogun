@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import logo from './Assets/logo.png';
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const is2025Page = location.pathname === '/2025';
@@ -25,7 +26,10 @@ const Navbar = () => {
 
   const navItems = is2025Page ? event2025NavItems : mainNavItems;
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
     if (href.startsWith('#')) {
       e.preventDefault();
       const element = document.getElementById(href.substring(1));
@@ -39,12 +43,19 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-md fixed w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="text-2xl font-bold text-purple-800">Miss Ekimogun</Link>
+            <Link to="/" className="flex items-center">
+              <img
+                src={logo}
+                alt="Logo"
+                className="h-8 w-auto object-contain"
+              />
+            </Link>
           </div>
-          
-          {/* Desktop Menu */}
+
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <a
@@ -62,11 +73,12 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
+          {/* Mobile Menu Toggle */}
+          <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-gray-700 hover:text-purple-600"
+              aria-label="Toggle navigation"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -74,20 +86,20 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Navigation */}
       {isOpen && (
-        <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div className="md:hidden bg-white shadow-md">
+          <div className="px-4 pt-2 pb-4 space-y-2">
             {navItems.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
                 onClick={(e) => handleClick(e, item.href)}
-                className={`${
+                className={`block text-base font-medium rounded-md px-3 py-2 ${
                   item.highlight
                     ? 'bg-purple-600 text-white'
                     : 'text-gray-700 hover:bg-purple-50'
-                } block px-3 py-2 rounded-md text-base font-medium`}
+                }`}
               >
                 {item.name}
               </a>
